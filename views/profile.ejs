@@ -1,0 +1,13 @@
+<%- include("partials/header", { title: "Profile", auth0Config }) %>
+
+<section class="card">
+  <h1>Profile</h1>
+  <p class="muted">Decoded claims from the stored <code>id_token</code>.</p>
+
+  <div id="profile-gate" class="status">Loading…</div>
+
+  <pre id="profile-json" class="code"></pre>
+</section>
+
+<%- include("partials/footer") %>
+

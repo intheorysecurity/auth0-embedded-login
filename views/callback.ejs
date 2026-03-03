@@ -1,0 +1,13 @@
+<%- include("partials/header", { title: "Callback", auth0Config }) %>
+
+<section class="card">
+  <h1>Callback</h1>
+  <p class="muted">
+    If you switch to a redirect-based flow, you can handle the response here.
+    For embedded login (<code>webAuth.login</code>), you usually won’t hit this route.
+  </p>
+  <div id="callback-result" class="result" aria-live="polite"></div>
+</section>
+
+<%- include("partials/footer") %>
+

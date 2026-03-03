@@ -1,0 +1,32 @@
+<%- include("partials/header", { title: "Home", auth0Config }) %>
+
+<section class="card">
+  <h1>Embedded login demo</h1>
+  <p class="muted">
+    This uses <code>auth0-js</code> in the browser for embedded <strong>signup</strong>, <strong>login</strong>,
+    and <strong>logout</strong>.
+  </p>
+
+  <div id="auth-status" class="status">Checking auth state…</div>
+
+  <div class="actions">
+    <a class="button" href="/login">Go to login</a>
+    <a class="button button--secondary" href="/signup">Go to signup</a>
+    <a class="button button--ghost" href="/profile">View profile</a>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Notes</h2>
+  <ul>
+    <li>
+      Embedded login for database users requires enabling Cross-Origin Authentication in your Auth0 tenant.
+    </li>
+    <li>
+      This sample stores tokens in <code>localStorage</code> (for demo only).
+    </li>
+  </ul>
+</section>
+
+<%- include("partials/footer") %>
+

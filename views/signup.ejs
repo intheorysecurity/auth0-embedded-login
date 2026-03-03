@@ -1,0 +1,27 @@
+<%- include("partials/header", { title: "Signup", auth0Config }) %>
+
+<section class="card">
+  <h1>Signup</h1>
+  <p class="muted">Uses <code>webAuth.signupAndLogin</code> with your database connection.</p>
+
+  <form id="signup-form" class="form">
+    <label>
+      Email
+      <input type="email" name="email" autocomplete="email" required />
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" autocomplete="new-password" minlength="8" required />
+    </label>
+    <button class="button" type="submit">Create account</button>
+  </form>
+
+  <div id="signup-result" class="result" aria-live="polite"></div>
+
+  <p class="muted">
+    Already have an account? <a href="/login">Log in</a>.
+  </p>
+</section>
+
+<%- include("partials/footer") %>
+

@@ -1,0 +1,27 @@
+<%- include("partials/header", { title: "Login", auth0Config }) %>
+
+<section class="card">
+  <h1>Login</h1>
+  <p class="muted">Uses <code>webAuth.login</code> with your database connection (realm).</p>
+
+  <form id="login-form" class="form">
+    <label>
+      Email
+      <input type="email" name="email" autocomplete="username" required />
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" autocomplete="current-password" required />
+    </label>
+    <button class="button" type="submit">Login</button>
+  </form>
+
+  <div id="login-result" class="result" aria-live="polite"></div>
+
+  <p class="muted">
+    Don’t have an account? <a href="/signup">Sign up</a>.
+  </p>
+</section>
+
+<%- include("partials/footer") %>
+

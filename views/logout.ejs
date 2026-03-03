@@ -1,0 +1,12 @@
+<%- include("partials/header", { title: "Logout", auth0Config }) %>
+
+<section class="card">
+  <h1>Logout</h1>
+  <p class="muted">This clears local tokens, then logs out at Auth0.</p>
+
+  <button id="logout-button" class="button button--danger" type="button">Logout</button>
+  <div id="logout-result" class="result" aria-live="polite"></div>
+</section>
+
+<%- include("partials/footer") %>
+
