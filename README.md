@@ -25,6 +25,7 @@ To use embedded username/password (database) login with `auth0-js`:
 
 - Enable **Cross-Origin Authentication** (tenant / client setting, depending on your Auth0 dashboard layout)
 - Ensure your Database Connection is enabled for your application
+- Make sure your callback route loads Auth0’s cross-origin verification handler (this demo does on `/callback`)
 
 ### 2) Configure env vars
 
@@ -59,4 +60,5 @@ Then open `http://localhost:3000`.
 
 - This demo stores tokens in **`localStorage`** for simplicity. For production, prefer more robust patterns and avoid storing long-lived tokens in browser storage.
 - Embedded login is not recommended for many production scenarios; Auth0’s recommended approaches often use hosted Universal Login instead.
+- If you see **“Unable to configure verification page”** / **failed cross-origin authentication**, it’s usually because the browser is blocking third‑party cookies and your app wasn’t handling the `type=co_verification` redirect on the callback URL (or the app origin isn’t whitelisted in Auth0).
 

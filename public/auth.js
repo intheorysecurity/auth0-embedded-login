@@ -113,11 +113,13 @@
 
   window.AuthDemo = {
     webAuth,
+    config,
     isAuthenticated,
     readTokens,
     clearTokens,
     getIdToken,
     decodeJwt,
+    setSessionFromAuthResult: setSession,
     loginWithPassword,
     signupAndLogin,
     logout

@@ -96,11 +96,53 @@
   // Callback page (if used)
   const callbackOut = qs("#callback-result");
   if (callbackOut) {
-    setResult(callbackOut, {
-      ok: true,
-      message:
-        "If you switch to redirect auth, parse the response here (e.g., webAuth.parseHash)."
-    });
+    const params = new URLSearchParams(window.location.search || "");
+    const type = (params.get("type") || "").toLowerCase();
+
+    // If third-party cookies are blocked (common on Safari), Auth0 can redirect
+    // back to the app for cross-origin verification. This page must call:
+    //   webAuth.crossOriginVerification()
+    if (type === "co_verification") {
+      setResult(callbackOut, {
+        ok: true,
+        message:
+          "Completing cross-origin verification… (This is expected when third-party cookies are blocked.)"
+      });
+
+      try {
+        auth.webAuth.crossOriginVerification();
+      } catch (e) {
+        setResult(callbackOut, {
+          ok: false,
+          message: e && e.message ? e.message : "crossOriginVerification failed."
+        });
+      }
+    } else if (window.location.hash && window.location.hash.includes("access_token")) {
+      setResult(callbackOut, { ok: true, message: "Processing redirect response…" });
+      auth.webAuth.parseHash(function (err, authResult) {
+        if (err) {
+          setResult(callbackOut, {
+            ok: false,
+            message: err.description || err.error_description || err.message || "parseHash failed."
+          });
+          return;
+        }
+
+        if (authResult && (authResult.accessToken || authResult.idToken)) {
+          auth.setSessionFromAuthResult(authResult);
+          setResult(callbackOut, { ok: true, message: "Authenticated. Redirecting…" });
+          window.location.replace("/");
+          return;
+        }
+
+        setResult(callbackOut, { ok: false, message: "No tokens found in callback response." });
+      });
+    } else {
+      setResult(callbackOut, {
+        ok: true,
+        message: `Callback loaded. Config realm/connection: "${(auth.config && auth.config.connection) || ""}".`
+      });
+    }
   }
 
   // Logout
