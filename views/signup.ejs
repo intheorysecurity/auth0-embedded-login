@@ -4,7 +4,7 @@
   <h1>Signup</h1>
   <p class="muted">Uses <code>webAuth.signupAndLogin</code> with your database connection.</p>
 
-  <form id="signup-form" class="form">
+  <form id="signup-form" class="form" method="post" action="/signup">
     <label>
       Email
       <input type="email" name="email" autocomplete="email" required />
@@ -15,6 +15,10 @@
     </label>
     <button class="button" type="submit">Create account</button>
   </form>
+
+  <% if (typeof serverError === "string" && serverError) { %>
+    <div class="result result--err" aria-live="polite"><%= serverError %></div>
+  <% } %>
 
   <div id="signup-result" class="result" aria-live="polite"></div>
 

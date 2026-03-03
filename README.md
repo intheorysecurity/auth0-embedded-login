@@ -20,12 +20,13 @@ Create (or reuse) an Auth0 application.
 - **Allowed Callback URLs**: `http://localhost:3000/callback`
 - **Allowed Logout URLs**: `http://localhost:3000/`
 - **Allowed Web Origins**: `http://localhost:3000`
+- **Cross-Origin Verification Fallback URL**: `http://localhost:3000/verification`
 
 To use embedded username/password (database) login with `auth0-js`:
 
 - Enable **Cross-Origin Authentication** (tenant / client setting, depending on your Auth0 dashboard layout)
 - Ensure your Database Connection is enabled for your application
-- Make sure your callback route loads Auth0’s cross-origin verification handler (this demo does on `/callback`)
+- Make sure your verification fallback page loads Auth0’s cross-origin verification handler (this demo does on `/verification`)
 
 ### 2) Configure env vars
 
@@ -49,6 +50,25 @@ npm run dev
 ```
 
 Then open `http://localhost:3000`.
+
+### Deploy to Vercel
+
+This repo includes a Vercel serverless entry at `api/index.js` and a `vercel.json` rewrite so routes like `/login` and `/signup` work without an Express “listen”.
+
+- You **do not** need to set `PORT` on Vercel.
+- Set Vercel Environment Variables:
+  - `AUTH0_DOMAIN`
+  - `AUTH0_CLIENT_ID`
+  - `AUTH0_DB_CONNECTION`
+  - (recommended) `AUTH0_AUDIENCE`
+
+In Auth0, update URLs to your Vercel HTTPS origin:
+
+- **Allowed Web Origins**: `https://<your-app>.vercel.app`
+- **Allowed Origins (CORS)**: `https://<your-app>.vercel.app`
+- **Allowed Callback URLs**: `https://<your-app>.vercel.app/callback`
+- **Allowed Logout URLs**: `https://<your-app>.vercel.app/`
+- **Cross-Origin Verification Fallback URL**: `https://<your-app>.vercel.app/verification`
 
 ### What’s implemented
 

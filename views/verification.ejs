@@ -10,12 +10,41 @@
 
 <script>
   (function () {
+    function hasExpectedContext() {
+      const search = new URLSearchParams(window.location.search || "");
+      const hash = new URLSearchParams(
+        (window.location.hash || "").startsWith("#")
+          ? (window.location.hash || "").slice(1)
+          : window.location.hash || ""
+      );
+
+      // Auth0 will typically pass parameters needed for verification. If this
+      // page is opened directly, auth0.js may fail with postMessage targetOrigin
+      // errors (e.g. "invalid target origin undefined").
+      return (
+        search.has("origin") ||
+        hash.has("origin") ||
+        search.has("type") ||
+        hash.has("type")
+      );
+    }
+
     // auth0.js is loaded in the footer; run as soon as it's available.
     function run() {
       try {
         if (!window.AuthDemo || !window.AuthDemo.webAuth) return false;
-        window.AuthDemo.webAuth.crossOriginVerification();
         const el = document.getElementById("verification-result");
+
+        if (!hasExpectedContext()) {
+          if (el) {
+            el.textContent =
+              "This page is meant to be opened by Auth0 during embedded login verification. " +
+              "If you opened it directly, go back to /login and try again.";
+          }
+          return true;
+        }
+
+        window.AuthDemo.webAuth.crossOriginVerification();
         if (el) el.textContent = "Completing verification…";
         return true;
       } catch (e) {

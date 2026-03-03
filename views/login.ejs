@@ -4,7 +4,7 @@
   <h1>Login</h1>
   <p class="muted">Uses <code>webAuth.login</code> with your database connection (realm).</p>
 
-  <form id="login-form" class="form">
+  <form id="login-form" class="form" method="post" action="/login">
     <label>
       Email
       <input type="email" name="email" autocomplete="username" required />
@@ -15,6 +15,10 @@
     </label>
     <button class="button" type="submit">Login</button>
   </form>
+
+  <% if (typeof serverError === "string" && serverError) { %>
+    <div class="result result--err" aria-live="polite"><%= serverError %></div>
+  <% } %>
 
   <div id="login-result" class="result" aria-live="polite"></div>
 

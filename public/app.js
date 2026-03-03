@@ -112,6 +112,15 @@
     // back to the app for cross-origin verification. This page must call:
     //   webAuth.crossOriginVerification()
     if (type === "co_verification") {
+      // Prefer the dedicated verification page (per Auth0 docs) because it will
+      // be invoked with the right context/params by Auth0.
+      if (window.location.pathname === "/callback") {
+        window.location.replace(
+          "/verification" + window.location.search + window.location.hash
+        );
+        return;
+      }
+
       setResult(callbackOut, {
         ok: true,
         message:
