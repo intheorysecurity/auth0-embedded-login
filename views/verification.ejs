@@ -10,46 +10,31 @@
 
 <script>
   (function () {
-    function hasExpectedContext() {
-      const search = new URLSearchParams(window.location.search || "");
-      const hash = new URLSearchParams(
-        (window.location.hash || "").startsWith("#")
-          ? (window.location.hash || "").slice(1)
-          : window.location.hash || ""
-      );
-
-      // Auth0 will typically pass parameters needed for verification. If this
-      // page is opened directly, auth0.js may fail with postMessage targetOrigin
-      // errors (e.g. "invalid target origin undefined").
-      return (
-        search.has("origin") ||
-        hash.has("origin") ||
-        search.has("type") ||
-        hash.has("type")
-      );
-    }
-
-    // auth0.js is loaded in the footer; run as soon as it's available.
+    // This page is based on Auth0’s sample verification callback:
+    // `auth0Client.crossOriginVerification()` invoked on a page configured as the
+    // Cross-Origin Verification Fallback URL.
+    // See: `https://raw.githubusercontent.com/auth0/lock/master/support/callback-cross-auth.html`
     function run() {
+      if (!window.auth0 || !window.__AUTH0_CONFIG__) return false;
+
+      const el = document.getElementById("verification-result");
+      const cfg = window.__AUTH0_CONFIG__ || {};
+
       try {
-        if (!window.AuthDemo || !window.AuthDemo.webAuth) return false;
-        const el = document.getElementById("verification-result");
+        const auth0Client = new auth0.WebAuth({
+          domain: cfg.domain,
+          clientID: cfg.clientID,
+          // Auth0's sample includes redirectUri pointing at the verification page itself.
+          redirectUri: window.location.origin + "/verification"
+        });
 
-        if (!hasExpectedContext()) {
-          if (el) {
-            el.textContent =
-              "This page is meant to be opened by Auth0 during embedded login verification. " +
-              "If you opened it directly, go back to /login and try again.";
-          }
-          return true;
-        }
-
-        window.AuthDemo.webAuth.crossOriginVerification();
+        auth0Client.crossOriginVerification();
         if (el) el.textContent = "Completing verification…";
         return true;
       } catch (e) {
-        const el = document.getElementById("verification-result");
-        if (el) el.textContent = e && e.message ? e.message : "Verification failed.";
+        if (el) {
+          el.textContent = e && e.message ? e.message : "Verification failed.";
+        }
         return true;
       }
     }

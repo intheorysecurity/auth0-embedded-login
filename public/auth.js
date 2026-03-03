@@ -78,7 +78,10 @@
       {
         realm: config.connection,
         username: email,
-        password: password
+        password: password,
+        onRedirecting: function (done) {
+          done();
+        }
       },
       function (err, authResult) {
         if (err) return cb(err);
@@ -93,7 +96,10 @@
       {
         connection: config.connection,
         email: email,
-        password: password
+        password: password,
+        onRedirecting: function (done) {
+          done();
+        }
       },
       function (err, authResult) {
         if (err) return cb(err);
