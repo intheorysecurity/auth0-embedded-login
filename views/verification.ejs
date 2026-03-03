@@ -1,0 +1,39 @@
+<%- include("partials/header", { title: "Verification", auth0Config }) %>
+
+<section class="card">
+  <h1>Cross-origin verification</h1>
+  <p class="muted">
+    Auth0 loads this page when it needs to complete cross-origin authentication verification.
+  </p>
+  <div id="verification-result" class="result" aria-live="polite"></div>
+</section>
+
+<script>
+  (function () {
+    // auth0.js is loaded in the footer; run as soon as it's available.
+    function run() {
+      try {
+        if (!window.AuthDemo || !window.AuthDemo.webAuth) return false;
+        window.AuthDemo.webAuth.crossOriginVerification();
+        const el = document.getElementById("verification-result");
+        if (el) el.textContent = "Completing verification…";
+        return true;
+      } catch (e) {
+        const el = document.getElementById("verification-result");
+        if (el) el.textContent = e && e.message ? e.message : "Verification failed.";
+        return true;
+      }
+    }
+
+    if (run()) return;
+    const id = setInterval(function () {
+      if (run()) clearInterval(id);
+    }, 25);
+    setTimeout(function () {
+      clearInterval(id);
+    }, 2000);
+  })();
+</script>
+
+<%- include("partials/footer") %>
+

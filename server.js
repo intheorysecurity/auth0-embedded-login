@@ -50,6 +50,22 @@ app.get("/signup", (req, res) => {
   res.render("signup", { auth0Config });
 });
 
+app.get("/debug", (req, res) => {
+  res.render("debug", {
+    auth0Config,
+    requestInfo: {
+      host: req.headers.host,
+      origin: req.headers.origin || null,
+      forwardedProto: req.headers["x-forwarded-proto"] || null
+    }
+  });
+});
+
+// Dedicated cross-origin verification page (per Auth0 docs).
+app.get("/verification", (req, res) => {
+  res.render("verification", { auth0Config });
+});
+
 // Some flows use redirects; keeping this route helps when you decide to switch.
 app.get("/callback", (req, res) => {
   res.render("callback", { auth0Config });

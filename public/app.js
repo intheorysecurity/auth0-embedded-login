@@ -97,7 +97,16 @@
   const callbackOut = qs("#callback-result");
   if (callbackOut) {
     const params = new URLSearchParams(window.location.search || "");
-    const type = (params.get("type") || "").toLowerCase();
+    const hashParams = new URLSearchParams(
+      (window.location.hash || "").startsWith("#")
+        ? (window.location.hash || "").slice(1)
+        : window.location.hash || ""
+    );
+    const type = (
+      params.get("type") ||
+      hashParams.get("type") ||
+      ""
+    ).toLowerCase();
 
     // If third-party cookies are blocked (common on Safari), Auth0 can redirect
     // back to the app for cross-origin verification. This page must call:
@@ -117,7 +126,10 @@
           message: e && e.message ? e.message : "crossOriginVerification failed."
         });
       }
-    } else if (window.location.hash && window.location.hash.includes("access_token")) {
+    } else if (
+      (window.location.hash && window.location.hash.includes("access_token")) ||
+      hashParams.has("access_token")
+    ) {
       setResult(callbackOut, { ok: true, message: "Processing redirect response…" });
       auth.webAuth.parseHash(function (err, authResult) {
         if (err) {

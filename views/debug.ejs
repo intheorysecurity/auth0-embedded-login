@@ -1,0 +1,46 @@
+<%- include("partials/header", { title: "Debug", auth0Config }) %>
+
+<section class="card">
+  <h1>Debug</h1>
+  <p class="muted">
+    Use this to confirm the exact Auth0 config your browser is using and the origin you’re serving from.
+  </p>
+
+  <div class="actions">
+    <a class="button button--ghost" href="/callback">Open /callback</a>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Browser</h2>
+  <pre id="browser-json" class="code"></pre>
+</section>
+
+<section class="card">
+  <h2>Server (request headers)</h2>
+  <pre class="code"><%- JSON.stringify(requestInfo, null, 2) %></pre>
+</section>
+
+<section class="card">
+  <h2>Injected Auth0 config</h2>
+  <pre class="code"><%- JSON.stringify(auth0Config, null, 2) %></pre>
+</section>
+
+<script>
+  (function () {
+    const el = document.getElementById("browser-json");
+    if (!el) return;
+    el.textContent = JSON.stringify(
+      {
+        locationOrigin: window.location.origin,
+        locationHref: window.location.href,
+        userAgent: navigator.userAgent
+      },
+      null,
+      2
+    );
+  })();
+</script>
+
+<%- include("partials/footer") %>
+
